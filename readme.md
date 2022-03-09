@@ -1,1 +1,1 @@
-{{SandboxBL}}/{{AutomationTest}}
+{{Sandbox_BL}}/{{AutomationTest}}
