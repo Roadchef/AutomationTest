@@ -1,0 +1,30 @@
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod +x ./.github/workflows/scripts/runTests.sh
+      - run: ./.github/workflows/scripts/runTests.sh AutomationTest
+  checks:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod +x ./.github/workflows/scripts/runChecks.sh
+      - run: ./.github/workflows/scripts/runChecks.sh AutomationTest
+  
+  promote:
+    runs-on: ubuntu-latest
+    needs: [test,checks]
+    environment:
+      name: production
+    steps:
+      - uses: actions/checkout@v2
+      - run: chmod +x ./.github/workflows/scripts/runPromotion.sh
+      - run: ./.github/workflows/scripts/runPromotion.sh AutomationTest
